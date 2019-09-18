@@ -1,0 +1,16 @@
+{# set dirty three space indent to match eos :( #}
+{% from "macros.j2" import
+    description,
+    state,
+    ethernet_l2_settings,
+    ethernet_l3_settings
+%}
+{% for interface in range(1, ethernet_interface_count + 1) %}
+   {%- set interface_name = "ethernet" + interface | string %}
+interface Ethernet{{ interface }}
+{{ description(ethernet_interfaces, interface_name) }}
+{{ ethernet_l2_settings(ethernet_interfaces, interface_name) }}
+{{ ethernet_l3_settings(ethernet_interfaces, interface_name) }}
+{{ state(ethernet_interfaces, interface_name) }}
+!
+{% endfor %}

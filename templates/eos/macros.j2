@@ -1,0 +1,113 @@
+{# set dirty three space indent to match eos :( #}
+
+{# interface description #}
+{% macro description(interfaces, interface_name) -%}
+   {%- if interface_name in interfaces.keys() %}
+      {%- if "description" in interfaces[interface_name].keys() %}
+   description {{ interfaces[interface_name]["description"] }}
+{% endif %}{% endif %}
+{% endmacro %}
+
+{# interface state #}
+{% macro state(interfaces, interface_name) -%}
+   {%- if interface_name in interfaces.keys() %}
+      {%- if "state" in interfaces[interface_name].keys() %}
+   {{ interfaces[interface_name]["state"] }}
+      {% endif %}
+   {%- else %}
+   shutdown
+{% endif %}
+{% endmacro %}
+
+{# ethernet interface layer 2 settings #}
+{% macro ethernet_l2_settings(ethernet_interfaces, interface_name) -%}
+   {%- if interface_name in ethernet_interfaces.keys() %}
+      {%- if "switched" in ethernet_interfaces[interface_name].keys() %}
+   switchport
+   switchport mode {{ ethernet_interfaces[interface_name]["switched"]["mode"] }}
+{% endif %}{% endif %}
+{% endmacro %}
+
+{# ethernet interface layer 3 settings #}
+{% macro ethernet_l3_settings(ethernet_interfaces, interface_name) %}
+   {%- if interface_name in ethernet_interfaces.keys() %}
+      {%- if "routed" in ethernet_interfaces[interface_name].keys() %}
+   no switchport
+   ip address {{ ethernet_interfaces[interface_name]["routed"]["ip"] }}
+   {% if "ospf" in ethernet_interfaces[interface_name]["routed"].keys() -%}
+   ip ospf dead-interval 3
+   ip ospf hello-interval 1
+   ip ospf network {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["type"] }}
+{% endif %}{% endif %}{% endif %}
+
+{% endmacro %}
+
+{# loopback interface layer 3 settings #}
+{% macro loopback_l3_settings(loopback_interfaces, interface_name) %}
+   {%- if interface_name in loopback_interfaces.keys() %}
+      {%- if "routed" in loopback_interfaces[interface_name].keys() %}
+   ip address {{ loopback_interfaces[interface_name]["routed"]["ip"] }}
+{% endif %}{% endif %}
+
+{% endmacro %}
+
+{# ethernet interface ospf passive interface settings #}
+{% macro ethernet_interface_ospf_passive_interfaces(ethernet_interfaces, ethernet_interface_count) -%}
+{% for interface in range(1, ethernet_interface_count + 1) %}
+   {%- set interface_name = "ethernet" + interface | string %}
+     {%- if interface_name in ethernet_interfaces.keys() %}
+       {%- if "routed" in ethernet_interfaces[interface_name].keys() %}
+         {%- if "ospf" in ethernet_interfaces[interface_name]["routed"].keys() %}
+           {%- if not ethernet_interfaces[interface_name]["routed"]["ospf"]["passive"] %}
+   no passive-interface {{ interface_name | capitalize }}
+{% endif %}{% endif %}{% endif %}{% endif %}{% endfor %}
+{% endmacro %}
+
+{# loopback interface ospf passive interface settings #}
+{% macro loopback_interface_ospf_passive_interfaces(loopback_interfaces) -%}
+   {% for interface_name in loopback_interfaces.keys() %}
+     {%- if "routed" in loopback_interfaces[interface_name].keys() %}
+       {%- if "ospf" in loopback_interfaces[interface_name]["routed"].keys() %}
+         {%- if not loopback_interfaces[interface_name]["routed"]["ospf"]["passive"] %}
+   no passive-interface {{ interface_name | capitalize }}
+{% endif %}{% endif %}{% endif %}{% endfor %}
+{% endmacro %}
+
+{# ethernet interface ospf network settings #}
+{% macro ethernet_interfaces_ospf_networks(ethernet_interfaces, ethernet_interface_count) -%}
+  {% for interface in range(1, ethernet_interface_count + 1) %}
+     {%- set interface_name = "ethernet" + interface | string %}
+     {%- if interface_name in ethernet_interfaces.keys() %}
+       {%- if "routed" in ethernet_interfaces[interface_name].keys() %}
+         {%- if "ospf" in ethernet_interfaces[interface_name]["routed"].keys() %}
+   network {{ ethernet_interfaces[interface_name]["routed"]["ip"].split("/")[0] }} 0.0.0.0 area {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["area"] }}
+{% endif %}{% endif %}{% endif %}{% endfor %}
+{% endmacro %}
+
+{# loopback interface ospf network settings #}
+{% macro loopback_interface_ospf_networks(loopback_interfaces) -%}
+   {% for interface_name in loopback_interfaces.keys() %}
+     {%- if "routed" in loopback_interfaces[interface_name].keys() %}
+       {%- if "ospf" in loopback_interfaces[interface_name]["routed"].keys() %}
+   network {{ loopback_interfaces[interface_name]["routed"]["ip"].split("/")[0] }} 0.0.0.0 area {{ loopback_interfaces[interface_name]["routed"]["ospf"]["area"] }}
+{% endif %}{% endif %}{% endfor %}
+{% endmacro %}
+
+{# bgp ipv4 neighbor setup #}
+{% macro bgp_ipv4_neighbors(bgp_ipv4) -%}
+   {% for neighbor, attrs in bgp_ipv4['neighbors'].items() %}
+   neighbor {{ neighbor }} remote-as {{ attrs['remote-as'] }}
+   neighbor {{ neighbor }} update-source {{ attrs['update-source'] }}
+{% endfor %}{% endmacro %}
+
+{# bgp ipv4 neighbor activation #}
+{% macro bgp_ipv4_neighbors_activate(bgp_ipv4) -%}
+   {% for neighbor in bgp_ipv4['neighbors'].keys() %}
+      neighbor {{ neighbor }} activate
+{% endfor %}{% endmacro %}
+
+{# bgp ipv4 networks #}
+{% macro bgp_ipv4_networks(bgp_ipv4) -%}
+   {% for network in bgp_ipv4['networks'] %}
+      network {{ network }}
+{% endfor %}{% endmacro %}

@@ -1,0 +1,16 @@
+{# set dirty three space indent to match eos :( #}
+{% from "macros.j2" import
+    ethernet_interface_ospf_passive_interfaces,
+    loopback_interface_ospf_passive_interfaces,
+    ethernet_interfaces_ospf_networks,
+    loopback_interface_ospf_networks
+%}
+router ospf {{ ospf_process_id }}
+   router-id {{ router_id }}
+   passive-interface default
+{{ ethernet_interface_ospf_passive_interfaces(ethernet_interfaces, ethernet_interface_count) }}
+{{ loopback_interface_ospf_passive_interfaces(loopback_interfaces) }}
+{{ ethernet_interfaces_ospf_networks(ethernet_interfaces, ethernet_interface_count) }}
+{{ loopback_interface_ospf_networks(loopback_interfaces) }}
+   max-lsa 12000
+

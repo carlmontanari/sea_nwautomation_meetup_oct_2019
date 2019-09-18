@@ -1,0 +1,36 @@
+{# set dirty three space indent to match eos :( #}
+transceiver qsfp default-mode 4x10G
+!
+hostname {{ host.name }}
+ip domain-name {{ domain_name }}
+{% for name_server in name_servers %}
+ip name-server vrf default {{ name_server }}
+{% endfor %}
+!
+ntp server pool.ntp.org
+!
+spanning-tree mode mstp
+!
+aaa authorization exec default local
+!
+no aaa root
+!
+username vrnetlab role network-admin secret sha512 $6$ZkJQ648lr.9smYsL$kWEoZlAWm8/hn6E99/i7atbxLBvsCsbOMMogQyM7CxSiD41gqKPI8Fw1eEFn3qTPjWNI.Eo9ns3QkN/k8ZIOD/
+!
+clock timezone {{ timezone }}{{ timezone_offset }}{{ timezone_summer }}
+!
+{% include 'ethernet_interfaces.j2' ignore missing %}
+{% include 'loopback_interfaces.j2' ignore missing %}
+!
+interface Management1
+   ip address 10.0.0.15/24
+!
+ip routing
+!
+{% include 'routing_bgp.j2' ignore missing %}
+!
+{% include 'routing_ospf.j2' ignore missing %}
+!
+management api http-commands
+   no shutdown
+   protocol https port 443

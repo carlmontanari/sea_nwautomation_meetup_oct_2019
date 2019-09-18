@@ -1,0 +1,16 @@
+{# set dirty three space indent to match eos :( #}
+{% from "macros.j2" import
+    description,
+    state,
+    loopback_l3_settings
+%}
+{% for interface in loopback_interfaces.keys() %}
+   {%- set interface_name = interface %}
+interface {{ interface }}
+{{ description(loopback_interfaces, interface_name) }}
+{{ loopback_l3_settings(loopback_interfaces, interface_name) }}
+{{ state(loopback_interfaces, interface_name) }}
+!
+{% endfor %}
+
+

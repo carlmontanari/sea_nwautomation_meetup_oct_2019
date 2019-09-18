@@ -1,0 +1,41 @@
+---
+sea:
+  data:
+    site_code: sea
+    timezone: PST
+    timezone_summer: PDT
+    timezone_offset: 8
+    name_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+    ospf_process_id: 1
+
+eos:
+  connection_options:
+    netmiko:
+      platform: cisco_ios
+      port: 22
+      extras: {}
+    napalm:
+      platform: eos
+      port: 443
+      extras:
+        optional_args:
+          eos_autoComplete: True
+  data:
+    template_dir: eos
+
+nxos:
+  connection_options:
+    netmiko:
+      platform: cisco_nxos
+      port: 22
+      extras: {}
+    napalm:
+      platform: nxos
+      port: 443
+      extras:
+        timeout: 300
+        optional_args: {}
+  data:
+    template_dir: nxos

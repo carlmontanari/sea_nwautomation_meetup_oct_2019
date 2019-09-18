@@ -1,0 +1,108 @@
+---
+sea-eos-1:
+  hostname: 172.18.0.11
+  groups:
+    - sea
+    - eos
+  data:
+    ethernet_interface_count: 19
+    ethernet_interfaces:
+      ethernet1:
+        description: sea-nxos-1 e1/1
+        state: no shutdown
+        routed:
+          ip: 10.255.255.1/30
+          ospf:
+            passive: False
+            area: 0.0.0.0
+            type: point-to-point
+      ethernet2:
+        description: sea-nxos-1 e1/2
+        state: no shutdown
+        routed:
+          ip: 10.255.255.5/30
+          ospf:
+            passive: False
+            area: 0.0.0.0
+            type: point-to-point
+    loopback_interfaces:
+      loopback0:
+        description: sea-eos-1 l0
+        state: no shutdown
+        routed:
+          ip: 10.255.255.101/32
+          ospf:
+            passive: True
+            area: 0.0.0.0
+            type: point-to-point
+      loopback1:
+        description: sea-eos-1 l1
+        state: no shutdown
+        routed:
+          ip: 10.255.255.201/32
+    router_id: 10.255.255.101
+    bgp_local_asn: 65535
+    bgp_max_paths_ibgp: 4
+    bgp_ipv4:
+      networks:
+        - 10.255.255.201/32
+      neighbors:
+        10.255.255.102:
+          remote-as: 65535
+          update-source: loopback0
+
+sea-nxos-1:
+  hostname: 172.18.0.12
+  groups:
+    - sea
+    - nxos
+  data:
+    features:
+      - lldp
+      - ospf
+      - bgp
+    ethernet_interface_count: 128
+    ethernet_interfaces:
+      ethernet1:
+        description: sea-eos-1 eth1
+        state: no shutdown
+        routed:
+          ip: 10.255.255.2/30
+          ospf:
+            passive: False
+            area: 0.0.0.0
+            type: point-to-point
+      ethernet2:
+        description: sea-eos-1 eth2
+        state: no shutdown
+        routed:
+          ip: 10.255.255.6/30
+          ospf:
+            passive: False
+            area: 0.0.0.0
+            type: point-to-point
+    loopback_interfaces:
+      loopback0:
+        description: sea-nxos-1 l0
+        state: no shutdown
+        routed:
+          ip: 10.255.255.102/32
+          ospf:
+            passive: True
+            area: 0.0.0.0
+            type: point-to-point
+      loopback1:
+        description: sea-nxos-1 l1
+        state: no shutdown
+        routed:
+          ip: 10.255.255.202/32
+    router_id: 10.255.255.102
+    bgp_local_asn: 65535
+    bgp_max_paths_ibgp: 4
+    bgp_ipv4:
+      networks:
+        - 10.255.255.202/32
+      neighbors:
+        10.255.255.101:
+          remote-as: 65535
+          update-source: loopback0
