@@ -1,5 +1,5 @@
 nornir>=2.2.0
-nornsible>=19.09.17
+nornsible>=19.09.20
 pylama>=7.6.6
 pylint>=2.3.1
 black>=19.3b0
