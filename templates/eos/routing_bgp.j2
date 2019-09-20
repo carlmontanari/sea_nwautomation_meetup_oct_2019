@@ -8,5 +8,5 @@ router bgp {{ bgp_local_asn }}
    maximum-paths {{ bgp_max_paths_ibgp }}
 {{ bgp_ipv4_neighbors(bgp_ipv4) }}
    address-family ipv4
-{{ bgp_ipv4_neighbors_activate(bgp_ipv4) }}
-{{ bgp_ipv4_networks(bgp_ipv4) }}
+{{ bgp_ipv4_neighbors_activate(bgp_ipv4) -}}
+{{ bgp_ipv4_networks(bgp_ipv4) -}}

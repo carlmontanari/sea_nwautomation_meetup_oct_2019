@@ -1,0 +1,4 @@
+{# set dirty three space indent to match eos :( #}
+{% for route in static_routing %}
+ip route {{ route }}
+{% endfor %}

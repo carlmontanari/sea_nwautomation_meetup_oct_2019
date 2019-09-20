@@ -11,9 +11,10 @@ sea:
     ospf_process_id: 1
 
 eos:
+  platform: eos
   connection_options:
     netmiko:
-      platform: cisco_ios
+      platform: arista_eos
       port: 22
       extras: {}
     napalm:
@@ -26,6 +27,7 @@ eos:
     template_dir: eos
 
 nxos:
+  platform: nxos
   connection_options:
     netmiko:
       platform: cisco_nxos

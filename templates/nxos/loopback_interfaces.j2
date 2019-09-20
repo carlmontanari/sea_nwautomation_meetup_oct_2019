@@ -6,7 +6,7 @@
 {% for interface in loopback_interfaces.keys() %}
    {%- set interface_name = interface %}
 interface {{ interface }}
-{{ description(loopback_interfaces, interface_name) }}
-{{ loopback_l3_settings(loopback_interfaces, interface_name, ospf_process_id) }}
+{{ description(loopback_interfaces, interface_name) -}}
+{{ loopback_l3_settings(loopback_interfaces, interface_name, ospf_process_id) -}}
 {{ state(loopback_interfaces, interface_name) }}
 {% endfor %}

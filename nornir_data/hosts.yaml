@@ -45,11 +45,32 @@ sea-eos-1:
     bgp_max_paths_ibgp: 4
     bgp_ipv4:
       networks:
+        - 0.0.0.0/0
         - 10.255.255.201/32
       neighbors:
         10.255.255.102:
           remote-as: 65535
           update-source: loopback0
+    static_routing:
+      - 0.0.0.0/0 Null0
+    expected_state:
+      ospf:
+        expected_peers:
+          - 10.255.255.2
+          - 10.255.255.6
+      bgp:
+        expected_neighbors:
+          - 10.255.255.102
+      routes:
+        0.0.0.0/0:
+          via: static
+          next_hops:
+            - None
+        10.255.255.102/32:
+          via: ospf
+          next_hops:
+            - 10.255.255.2
+            - 10.255.255.6
 
 sea-nxos-1:
   hostname: 172.18.0.12
@@ -106,3 +127,21 @@ sea-nxos-1:
         10.255.255.101:
           remote-as: 65535
           update-source: loopback0
+    expected_state:
+      ospf:
+        expected_peers:
+          - 10.255.255.1
+          - 10.255.255.5
+      bgp:
+        expected_neighbors:
+          - 10.255.255.101
+      routes:
+        0.0.0.0/0:
+          via: bgp
+          next_hops:
+            - 10.255.255.101
+        10.255.255.101/32:
+          via: ospf
+          next_hops:
+            - 10.255.255.1
+            - 10.255.255.5

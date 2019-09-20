@@ -4,5 +4,5 @@
 router bgp {{ bgp_local_asn }}
   router-id {{ router_id }}
   address-family ipv4 unicast
-{{ bgp_ipv4_networks(bgp_ipv4) }}
+{{ bgp_ipv4_networks(bgp_ipv4) -}}
 {{ bgp_ipv4_neighbors(bgp_ipv4) }}

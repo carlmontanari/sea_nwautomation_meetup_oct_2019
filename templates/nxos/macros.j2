@@ -1,80 +1,1 @@
-{# interface description #}
-{% macro description(interfaces, interface_name) -%}
-  {%- if interface_name in interfaces.keys() %}
-    {%- if "description" in interfaces[interface_name].keys() %}
-  description {{ interfaces[interface_name]["description"] }}
-{% endif %}{% endif %}
-{% endmacro %}
-
-{# interface state #}
-{% macro state(interfaces, interface_name) -%}
-  {%- if interface_name in interfaces.keys() %}
-    {%- if "state" in interfaces[interface_name].keys() %}
-  {{ interfaces[interface_name]["state"] }}
-    {% endif %}
-  {%- else %}
-  no switchport
-  shutdown
-{% endif %}
-{% endmacro %}
-
-
-{# ethernet interface layer 2 settings #}
-{% macro ethernet_l2_settings(ethernet_interfaces, interface_name) -%}
-  {%- if interface_name in ethernet_interfaces.keys() %}
-    {%- if "switched" in ethernet_interfaces[interface_name].keys() %}
-  switchport
-  switchport mode {{ ethernet_interfaces[interface_name]["switched"]["mode"] }}
-   {# see napalm config replace caveats! if switchport must include commented out info for checkpoint file! #}
-{% endif %}{% endif %}
-{% endmacro %}
-
-{# ethernet interface layer 3 settings #}
-{% macro ethernet_l3_settings(ethernet_interfaces, interface_name, ospf_process_id) %}
-  {%- if interface_name in ethernet_interfaces.keys() %}
-    {%- if "routed" in ethernet_interfaces[interface_name].keys() %}
-  no switchport
-  ip address {{ ethernet_interfaces[interface_name]["routed"]["ip"] }}
-  {% if "ospf" in ethernet_interfaces[interface_name]["routed"].keys() -%}
-  ip ospf dead-interval 3
-  ip ospf hello-interval 1
-  {% if not ethernet_interfaces[interface_name]["routed"]["ospf"]["passive"] -%}
-  no ip ospf passive-interface
-  {% endif -%}
-  ip router ospf {{ ospf_process_id }} area {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["area"] }}
-  ip ospf network {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["type"] }}
-{% endif %}{% endif %}{% endif %}
-{% endmacro %}
-
-{# loopback interface layer 3 settings #}
-{% macro loopback_l3_settings(loopback_interfaces, interface_name, ospf_process_id) %}
-  {%- if interface_name in loopback_interfaces.keys() %}
-    {%- if "routed" in loopback_interfaces[interface_name].keys() %}
-  ip address {{ loopback_interfaces[interface_name]["routed"]["ip"] }}
-  {% if "ospf" in loopback_interfaces[interface_name]["routed"].keys() -%}
-  {% if not loopback_interfaces[interface_name]["routed"]["ospf"]["passive"] -%}
-  no ip ospf passive-interface
-  {% endif -%}
-  ip router ospf {{ ospf_process_id }} area {{ loopback_interfaces[interface_name]["routed"]["ospf"]["area"] }}
-  ip ospf network {{ loopback_interfaces[interface_name]["routed"]["ospf"]["type"] }}
-{% endif %}{% endif %}{% endif %}
-{% endmacro %}
-
-{# bgp ipv4 networks #}
-{% macro bgp_ipv4_networks(bgp_ipv4) %}
-  {%- for network in bgp_ipv4['networks'] %}
-    network {{ network }}
-{% endfor %}
-    maximum-paths ibgp 2
-{% endmacro %}
-
-{# bgp ipv4 neighbor setup #}
-{% macro bgp_ipv4_neighbors(bgp_ipv4) %}
-  {%- for neighbor, attrs in bgp_ipv4['neighbors'].items() %}
-  neighbor {{ neighbor }}
-    remote-as {{ attrs['remote-as'] }}
-    update-source {{ attrs['update-source'] }}
-    address-family ipv4 unicast
-{% endfor %}{% endmacro %}
-
-
+{# interface description #}{% macro description(interfaces, interface_name) %}{% if interface_name in interfaces.keys() %}{% if "description" in interfaces[interface_name].keys() %}  description {{ interfaces[interface_name]["description"] }}{% endif %}{% endif %}{% endmacro %}{# interface state #}{% macro state(interfaces, interface_name) %}{% if interface_name in interfaces.keys() %}{% if "state" in interfaces[interface_name].keys() %}  {{ interfaces[interface_name]["state"] }}{% endif %}{% else %}  no switchport  shutdown{% endif %}{% endmacro %}{# ethernet interface layer 2 settings #}{% macro ethernet_l2_settings(ethernet_interfaces, interface_name) %}{% if interface_name in ethernet_interfaces.keys() %}{% if "switched" in ethernet_interfaces[interface_name].keys() %}  switchport  switchport mode {{ ethernet_interfaces[interface_name]["switched"]["mode"] }}  {# see napalm config replace caveats! if switchport must include commented out info for checkpoint file! #}{% endif %}{% endif %}{% endmacro %}{# ethernet interface layer 3 settings #}{% macro ethernet_l3_settings(ethernet_interfaces, interface_name, ospf_process_id) %}{% if interface_name in ethernet_interfaces.keys() %}{% if "routed" in ethernet_interfaces[interface_name].keys() %}  no switchport  ip address {{ ethernet_interfaces[interface_name]["routed"]["ip"] }}{% if "ospf" in ethernet_interfaces[interface_name]["routed"].keys() %}  ip ospf dead-interval 3  ip ospf hello-interval 1{% if not ethernet_interfaces[interface_name]["routed"]["ospf"]["passive"] %}  no ip ospf passive-interface{% endif %}  ip router ospf {{ ospf_process_id }} area {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["area"] }}  ip ospf network {{ ethernet_interfaces[interface_name]["routed"]["ospf"]["type"] }}{% endif %}{% endif %}{% endif %}{% endmacro %}{# loopback interface layer 3 settings #}{% macro loopback_l3_settings(loopback_interfaces, interface_name, ospf_process_id) %}{% if interface_name in loopback_interfaces.keys() %}{% if "routed" in loopback_interfaces[interface_name].keys() %}  ip address {{ loopback_interfaces[interface_name]["routed"]["ip"] }}{% if "ospf" in loopback_interfaces[interface_name]["routed"].keys() %}{% if not loopback_interfaces[interface_name]["routed"]["ospf"]["passive"] %}  no ip ospf passive-interface{% endif %}  ip router ospf {{ ospf_process_id }} area {{ loopback_interfaces[interface_name]["routed"]["ospf"]["area"] }}  ip ospf network {{ loopback_interfaces[interface_name]["routed"]["ospf"]["type"] }}{% endif %}{% endif %}{% endif %}{%- endmacro %}{# bgp ipv4 networks #}{% macro bgp_ipv4_networks(bgp_ipv4) %}{% for network in bgp_ipv4['networks'] %}    network {{ network }}{% endfor %}    maximum-paths ibgp 2{% endmacro %}{# bgp ipv4 neighbor setup #}{% macro bgp_ipv4_neighbors(bgp_ipv4) %}{% for neighbor, attrs in bgp_ipv4['neighbors'].items() %}  neighbor {{ neighbor }}    remote-as {{ attrs['remote-as'] }}    update-source {{ attrs['update-source'] }}    address-family ipv4 unicast{% endfor %}{% endmacro %}

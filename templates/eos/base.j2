@@ -21,16 +21,17 @@ clock timezone {{ timezone }}{{ timezone_offset }}{{ timezone_summer }}
 !
 {% include 'ethernet_interfaces.j2' ignore missing %}
 {% include 'loopback_interfaces.j2' ignore missing %}
-!
 interface Management1
    ip address 10.0.0.15/24
+!
+{% include 'routing_static.j2' ignore missing %}
 !
 ip routing
 !
 {% include 'routing_bgp.j2' ignore missing %}
 !
 {% include 'routing_ospf.j2' ignore missing %}
-!
+
 management api http-commands
    no shutdown
    protocol https port 443
