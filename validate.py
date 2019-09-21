@@ -180,8 +180,8 @@ def _validate_routes_nxos(task):
             missing_routes.append(route)
             continue
         if (
-                len(task.host.data["expected_state"]["routes"][route]["next_hops"])
-                != result.result.count("via") - 1
+            len(task.host.data["expected_state"]["routes"][route]["next_hops"])
+            != result.result.count("via") - 1
         ):
             missing_routes.append(route)
             continue
@@ -202,13 +202,13 @@ def _validate_routes_eos(task):
             missing_routes.append(route)
             continue
         if len(routes[route]) != len(
-                task.host.data["expected_state"]["routes"][route]["next_hops"]
+            task.host.data["expected_state"]["routes"][route]["next_hops"]
         ):
             missing_routes.append(route)
             continue
         if (
-                routes[route][0]["protocol"].lower()
-                != task.host.data["expected_state"]["routes"][route]["via"]
+            routes[route][0]["protocol"].lower()
+            != task.host.data["expected_state"]["routes"][route]["via"]
         ):
             missing_routes.append(route)
         task.results.pop()
