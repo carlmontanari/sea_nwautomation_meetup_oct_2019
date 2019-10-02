@@ -53,7 +53,7 @@ def gather_reachable_interfaces(task):
 
 
 @nornsible_task
-def test_reachability(task, timeout=1, count=5, reachable_ips=None):
+def validate_reachability(task, timeout=1, count=5, reachable_ips=None):
     """
     Test reachability from all devices
 
@@ -236,7 +236,7 @@ def validate_routes(task):
 def main():
     tasks = [
         gather_reachable_interfaces,
-        test_reachability,
+        validate_reachability,
         validate_ospf_peers,
         validate_bgp_neighbors,
         validate_routes,
