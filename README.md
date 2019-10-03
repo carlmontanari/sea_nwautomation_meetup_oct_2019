@@ -10,7 +10,7 @@ Repository for my demo/presentation "Nornir for ad hoc Configuration and Verific
 - Samir's presentation on Batfish is [comingsoon!]()
 - My presentation is [here](/presentation/Nornir_for_Adhoc_Tasks_Carl_Montanari.pdf)
 - Eric's presentation on Network Evolution is [here](/presentation/Network_Automation_Evolution_Eric_Chou.pdf)
-- Chip's presentation on Netbox and Peering Manager is [commingsoon!]()
+- Chip's presentation on Netbox and Peering Manager is [here](/presentation/Netbox_and_Peering_Manager_Chip_Marshall.pdf)
 
 Huge thanks to Intentionet and Samir and Ratul for hosting the Meetup and to everyone who came out!
 
