@@ -8,7 +8,7 @@ sea_nwautomation_meetup_oct_2019
 Repository for my demo/presentation "Nornir for ad hoc Configuration and Verification" for the inaugural Seattle Network Automation Meetup meeting!
 
 - Samir's presentation on Batfish is [here as a pdf](/presentation/Batfish_Introduction_Samir_Parikh.pdf)
-  - And [here](ihttps://docs.google.com/presentation/d/1IGwO0AFn-wEKcVNpyWhUsSVIBqJvESOcfJdEGPuBpHU/) as a Google doc so you can use it that way too!
+  - And [here](https://docs.google.com/presentation/d/1IGwO0AFn-wEKcVNpyWhUsSVIBqJvESOcfJdEGPuBpHU/) as a Google doc so you can use it that way too!
 - My presentation is [here](/presentation/Nornir_for_Adhoc_Tasks_Carl_Montanari.pdf)
 - Eric's presentation on Network Evolution is [here](/presentation/Network_Automation_Evolution_Eric_Chou.pdf)
 - Chip's presentation on Netbox and Peering Manager is [here](/presentation/Netbox_and_Peering_Manager_Chip_Marshall.pdf)
